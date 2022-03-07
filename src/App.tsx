@@ -1,5 +1,6 @@
 import React from 'react'
 import './App.css'
+import CustomInput from './CustomInput'
 import { getUser, User } from './get-user'
 
 function App() {
@@ -28,25 +29,6 @@ function App() {
   )
 }
 
-interface CustomInputProps {
-  children: React.ReactNode
-  value: string
-  onChange(event: React.ChangeEvent<HTMLInputElement>): void
-}
 
-function CustomInput({ children, value, onChange }: CustomInputProps) {
-  return (
-    <div>
-      <label htmlFor="search">{children}</label>
-      <input
-        id="search"
-        type="text"
-        placeholder="Example"
-        value={value}
-        onChange={onChange}
-      />
-    </div>
-  )
-}
 
 export default App

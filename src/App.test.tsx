@@ -1,5 +1,6 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { mocked } from 'ts-jest/utils'
 import App from './App'
 import { getUser } from './get-user'
@@ -53,5 +54,25 @@ describe('When the component fetches the user successfully', () => {
     expect(screen.queryByText(/Username/)).toBeNull()
     expect(await screen.findByText(/Username/)).toBeInTheDocument()
     expect(await screen.findByText(`Username: ${name}`)).toBeInTheDocument()
+  })
+})
+
+describe('When the user enters some text in the input element', () => {
+  test('should display the text in the screen', async () => {
+    render(<App />)
+    await waitFor(() => expect(mockedGetUser).toHaveBeenCalled())
+    expect(screen.getByText(/You typed: .../)).toBeInTheDocument()
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: 'Luca' }
+    })
+    expect(screen.getByText(/You typed: Luca/)).toBeInTheDocument()
+  })
+
+  test('should display the text in the screen with userEvent', async () => {
+    render(<App />)
+    await waitFor(() => expect(mockedGetUser).toHaveBeenCalled())
+    expect(screen.getByText(/You typed: .../)).toBeInTheDocument()
+    await userEvent.type(screen.getByRole('textbox'), 'David')
+    expect(screen.getByText(/You typed: David/)).toBeInTheDocument()
   })
 })
